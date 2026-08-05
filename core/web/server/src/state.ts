@@ -81,12 +81,37 @@ export function appendLog(entry: Omit<LogEntry, "ts">): void {
 
 /** Mirrors core/scripts/lib.mjs's commitStateChange -- the dashboard's
  *  pause/resume button mutates control.json directly, so it needs to leave
- *  a clean, committed working tree too, same as the CLI mutator does. */
+ *  a clean, committed working tree too, same as the CLI mutator does.
+ *
+ *  Also pushes `main` (best-effort, never throws). This is what makes the
+ *  dashboard's Pause button actually reach cloud-scheduled cycles -- they
+ *  clone fresh from origin each run, so an unpushed pause is invisible to
+ *  them. */
 export function commitStateChange(message: string): void {
   execSync(`git add state/graph.json state/control.json state/log.jsonl`, { cwd: ROOT });
   const staged = execSync(`git diff --cached --name-only`, { cwd: ROOT, encoding: "utf8" }).trim();
   if (!staged) return;
   execSync(`git commit -q -m ${JSON.stringify(message)}`, { cwd: ROOT });
+  try {
+    execSync(`git push origin main --quiet`, { cwd: ROOT });
+  } catch (err) {
+    console.warn("commitStateChange: push failed (committed locally, will retry next time) —", (err as Error).message.split("\n")[0]);
+  }
+}
+
+/** Cycles run in isolated cloud sandboxes and push their results to
+ *  `origin/main` -- this machine's checkout only sees that work once it
+ *  pulls. Best-effort, fast-forward only: if the remote has moved on and a
+ *  local dashboard action (pause/resume) hasn't been pushed, this no-ops
+ *  rather than risking a merge. Never throws -- a stale dashboard view is
+ *  fine, corrupting state is not. */
+export function syncFromOrigin(): void {
+  try {
+    execSync(`git fetch origin main --quiet`, { cwd: ROOT });
+    execSync(`git merge --ff-only origin/main --quiet`, { cwd: ROOT });
+  } catch (err) {
+    console.warn("syncFromOrigin: skipped (no remote, no network, or diverged) —", (err as Error).message.split("\n")[0]);
+  }
 }
 
 export function readLog(opts: { since?: string; limit?: number } = {}): LogEntry[] {

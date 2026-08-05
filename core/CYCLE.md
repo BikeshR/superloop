@@ -105,6 +105,11 @@ don't need a separate `git commit` for graph.json/control.json/log.jsonl):
 node core/scripts/update-graph.mjs success --node <node> --cycle <cycleId> --note "<one-line summary>"
 ```
 
+Push `main` so the next cycle (a fresh clone) sees this state:
+```
+git push origin main
+```
+
 Then **stop** — cycle complete.
 
 ## 6. Fail path (tests red, or guardrail diff rejected, or you get stuck)
@@ -121,6 +126,12 @@ Record the failure (this also feeds the circuit breaker and commits the
 node core/scripts/update-graph.mjs fail --node <node> --cycle <cycleId> --reason "<what went wrong>"
 ```
 
+Push `main` so the failure (and a possible pause) is visible to the next
+cycle and to the dashboard:
+```
+git push origin main
+```
+
 Then **stop**. If this trips the circuit breaker (3 consecutive failures by
 default), `update-graph.mjs` sets `paused: true` automatically — that's
 expected, not an error on your part. A human will look at `state/log.jsonl`,
@@ -130,6 +141,10 @@ fix or accept the situation, and resume via the dashboard or
 ## Hard limits, always
 
 - One node, one cycle. Never work on more than one node per invocation.
-- Never push to any remote. This stays local until a human explicitly does that themselves.
+- You run in an isolated cloud sandbox, cloned fresh from `origin/main` each
+  time — that clone is already current, there is nothing to `git pull`.
+- The only thing you ever push is `main`, and only after step 5 or step 6's
+  `update-graph.mjs` call. Never push a feature branch, never force-push,
+  never push anything the guardrail diff-check rejected.
 - Never modify `core/**` or `control.json`'s safety fields, even to "fix" something — flag it in the failure reason instead and stop.
 - If anything is ambiguous or you're not confident the change is safe, prefer the fail path over guessing.

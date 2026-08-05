@@ -1,10 +1,17 @@
 import express from "express";
 import path from "node:path";
 import fs from "node:fs";
-import { ROOT, readGraph, readControl, writeControl, readLog, appendLog, commitStateChange } from "./state.js";
+import { ROOT, readGraph, readControl, writeControl, readLog, appendLog, commitStateChange, syncFromOrigin } from "./state.js";
 
 const app = express();
 const PORT = Number(process.env.PORT ?? 4319);
+const SYNC_INTERVAL_MS = 20_000;
+
+// Cloud-scheduled cycles push their results to origin/main; pull those in
+// periodically so the dashboard reflects them without a human running
+// `git pull` by hand. Best-effort — see syncFromOrigin's doc comment.
+syncFromOrigin();
+setInterval(syncFromOrigin, SYNC_INTERVAL_MS);
 
 app.get("/api/state", (_req, res) => {
   try {

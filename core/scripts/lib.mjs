@@ -104,12 +104,23 @@ export function parseArgs(argv) {
 /** update-graph.mjs is the sanctioned mutator for state/*, so it also owns
  *  committing those changes -- a cycle should never end with an uncommitted
  *  diff sitting in the working tree for the next cycle (or a human) to trip
- *  over. Commits only state/*, never anything else. */
+ *  over. Commits only state/*, never anything else.
+ *
+ *  Also pushes `main` (best-effort). This matters most for the pause
+ *  kill-switch: cloud cycles clone fresh from origin each run, so a pause
+ *  that never leaves this machine is invisible to them. A push failure
+ *  (offline, no remote) is logged but never throws -- the local commit
+ *  still stands either way. */
 export function commitStateChange(message) {
   execSync(`git add state/graph.json state/control.json state/log.jsonl`, { cwd: ROOT });
   const staged = execSync(`git diff --cached --name-only`, { cwd: ROOT, encoding: "utf8" }).trim();
   if (!staged) return; // nothing changed (shouldn't normally happen, log.jsonl always grows)
   execSync(`git commit -q -m ${JSON.stringify(message)}`, { cwd: ROOT });
+  try {
+    execSync(`git push origin main --quiet`, { cwd: ROOT });
+  } catch (err) {
+    console.warn("commitStateChange: push failed (committed locally, will retry next time) —", err.message.split("\n")[0]);
+  }
 }
 
 export function fail(message) {

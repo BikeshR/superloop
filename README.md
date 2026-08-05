@@ -61,6 +61,25 @@ claude "Follow core/CYCLE.md and run exactly one cycle."
 It will check `state/control.json` first and refuse to do anything if
 `paused: true`.
 
+## How cloud-scheduled cycles and the local dashboard stay in sync
+
+Real (unsupervised) cycles run as **cloud routines** — each one is an
+isolated sandbox cloned fresh from `origin/main` (`github.com/BikeshR/superloop`),
+never this machine. So state has to travel through GitHub, not disk:
+
+- every cycle ends by pushing its `state/*` commit to `origin/main` (see
+  `core/CYCLE.md`) — that's how the *next* cycle's fresh clone sees it;
+- `core/scripts/update-graph.mjs` and the dashboard's `POST /api/control`
+  both auto-commit *and* auto-push `state/*` for the same reason — a Pause
+  click that never reaches GitHub is invisible to the next cloud cycle;
+- the local dashboard server pulls `origin/main` (fast-forward only, every
+  ~20s) so what you see stays current without running `git pull` by hand.
+
+This means: pause/resume from the dashboard works even though cycles run in
+the cloud, but it also means **this repo does push to a real GitHub remote
+automatically** — that was a deliberate trade-off (see below), not the
+original "stays local" default.
+
 ## Safety rails
 
 - **Sandboxed branch per cycle** — work happens on `cycle/<id>-<node>`, never directly on `main`.
@@ -68,7 +87,7 @@ It will check `state/control.json` first and refuse to do anything if
 - **Auto-revert** — failing tests or a rejected diff means the branch is discarded, not merged.
 - **Circuit breaker** — 3 consecutive failures (`state/control.json.failureThreshold`) auto-pauses the loop.
 - **Pause/kill-switch** — flip `state/control.json.paused`, or use the dashboard's Pause button (`POST /api/control`).
-- **No auto-push** — this stays a local repo; pushing anywhere is a manual step you take yourself.
+- **Auto-push to `origin/main`** — cloud-scheduled cycles run in isolated sandboxes with no access to this disk, so pushing is how state actually persists between them (see "How cloud-scheduled cycles and the local dashboard stay in sync" above). This was a deliberate, explicitly-approved trade-off, not the original design default — the alternative (fully local, no remote) is still possible by running cycles by hand instead of scheduling them.
 
 To resume after a pause:
 ```
