@@ -40,7 +40,7 @@ fs.writeFileSync(
       type: "module",
       description: desc,
       scripts: {
-        test: "node --test test/",
+        test: "node --test",
       },
     },
     null,

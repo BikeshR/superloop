@@ -9,7 +9,10 @@
   "xpPerLevel": 50,
   "maxDiffFiles": 20,
   "maxDiffLines": 800,
-  "allowedPaths": ["state/**", "generated/**"],
+  "allowedPaths": [
+    "state/**",
+    "generated/**"
+  ],
   "lastCycleId": null,
   "lastCycleAt": null,
   "totalCycles": 0
