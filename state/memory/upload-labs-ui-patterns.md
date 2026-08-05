@@ -6,7 +6,8 @@ createdAt: 2026-08-05T15:40:00.000Z
 
 # Upload Labs-style tech-tree/pipeline UI patterns
 
-Reference findings, human-facing only — see correction below.
+Reference findings, human-facing only (`tags: [reference]`,
+`relatedNodes: []` — no automated node acts on this file; see below).
 
 - Node tiles show label, level, and an xp-fill bar; locked nodes render
   dashed/dim rather than hidden, so the shape of what's still ahead is
@@ -19,20 +20,11 @@ Reference findings, human-facing only — see correction below.
   re-layout every tick.
 
 This superloop dashboard (`core/web/client/src/graph-render.ts`) already
-implements this pattern.
-
-**Correction (cycle-6 curation):** the original note here said future
-`build`/`output` cycles would extend this UI. That's wrong — per
-`README.md`, `core/` (which includes the whole dashboard) is hand-authored
-and off-limits to the loop; `build`/`test` may only touch `generated/**` and
-`state/**`. No cycle can ever edit `graph-render.ts`. This file stays only
-as descriptive reference for a *human* who decides to extend the dashboard
-themselves, not as a target for an automated cycle.
-
-**(cycle-7 curation):** cleared `relatedNodes` to `[]` to match — it
-previously still listed `research`, which wrongly implied some automated
-node has a reason to act on this file. `tags` already carried `reference`;
-this file is the first to pair that tag with an empty `relatedNodes`, which
-is now the corpus convention for human-only background material (see
-`build-readiness-brief.md`'s `actionable` tag for the other half of that
-convention).
+implements this pattern. `core/` (the whole dashboard included) is
+hand-authored and off-limits to the loop per `README.md` —
+`build`/`test` may only touch `generated/**` and `state/**`, so no cycle can
+ever edit `graph-render.ts`. This file is descriptive reference for a
+*human* who decides to extend the dashboard themselves, not a target for an
+automated cycle — hence the empty `relatedNodes` above, the corpus
+convention (see `build-readiness-brief.md`) for human-only background
+material.

@@ -11,23 +11,17 @@ into one file — they were really one throughline ("what should the first
 build module be, and what does it need to know") spread across four
 appends. Distilled and replaces: `first-build-module-candidates.md`,
 `memory-frontmatter-parsing.md`, `log-jsonl-event-shapes.md`,
-`generated-modules-are-standalone.md` (all removed by this curation pass;
-their content lives here now, condensed).
+`generated-modules-are-standalone.md` (their content lives here now,
+condensed; per-cycle attribution for who-changed-what lives in
+`state/log.jsonl`, not repeated here). `createdAt` reflects this file's own
+merge time, not an inherited placeholder — matters because the eventual
+`memory-index` module (see below) will sort/index on it.
 
-Tagged `actionable` (cycle-7 curation) — a small vocabulary this corpus is
-starting to use so a skim can tell, from front-matter alone, which files a
-`plan`/`build` cycle should read closely (`actionable`) versus which are
-background context only (`reference`, see `upload-labs-ui-patterns.md`).
-Future `memory` cycles should keep applying one or the other as the corpus
-grows, rather than leaving new files untagged either way.
-
-`createdAt` corrected (cycle-8 curation): this file inherited the
-`00:00:00.000Z` placeholder from the first source file it was consolidated
-from (cycle-2's `first-build-module-candidates.md`), which never reflected
-a real moment — it now reads the actual merge time of this consolidated
-file (cycle-6, per `state/log.jsonl`). Matters because the eventual
-`memory-index` module (see below) will sort/index on this field; a
-placeholder timestamp would make this file always look artificially old.
+Tagged `actionable`, per this corpus's small convention: `actionable` marks
+files a `plan`/`build` cycle should read closely, `reference` (paired with
+an empty `relatedNodes`) marks human-only background material — see
+`upload-labs-ui-patterns.md`. Future `memory` cycles should keep applying
+one or the other as the corpus grows.
 
 ## Recommendation: `memory-index` first, `log-summarizer` second
 
