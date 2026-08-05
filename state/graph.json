@@ -1,16 +1,16 @@
 {
   "$schemaVersion": 1,
-  "updatedAt": null,
+  "updatedAt": "2026-08-05T15:31:52.530Z",
   "nodes": [
     {
       "id": "research",
       "label": "Research",
       "kind": "research",
       "level": 0,
-      "xp": 0,
+      "xp": 10,
       "status": "unlocked",
       "dependsOn": [],
-      "lastCycleId": null
+      "lastCycleId": "cycle-1"
     },
     {
       "id": "memory",
@@ -19,7 +19,12 @@
       "level": 0,
       "xp": 0,
       "status": "locked",
-      "dependsOn": [{ "id": "research", "minLevel": 1 }],
+      "dependsOn": [
+        {
+          "id": "research",
+          "minLevel": 1
+        }
+      ],
       "lastCycleId": null
     },
     {
@@ -29,7 +34,12 @@
       "level": 0,
       "xp": 0,
       "status": "locked",
-      "dependsOn": [{ "id": "memory", "minLevel": 1 }],
+      "dependsOn": [
+        {
+          "id": "memory",
+          "minLevel": 1
+        }
+      ],
       "lastCycleId": null
     },
     {
@@ -40,8 +50,14 @@
       "xp": 0,
       "status": "locked",
       "dependsOn": [
-        { "id": "memory", "minLevel": 2 },
-        { "id": "plan", "minLevel": 1 }
+        {
+          "id": "memory",
+          "minLevel": 2
+        },
+        {
+          "id": "plan",
+          "minLevel": 1
+        }
       ],
       "lastCycleId": null
     },
@@ -52,7 +68,12 @@
       "level": 0,
       "xp": 0,
       "status": "locked",
-      "dependsOn": [{ "id": "build", "minLevel": 1 }],
+      "dependsOn": [
+        {
+          "id": "build",
+          "minLevel": 1
+        }
+      ],
       "lastCycleId": null
     },
     {
@@ -62,7 +83,12 @@
       "level": 0,
       "xp": 0,
       "status": "locked",
-      "dependsOn": [{ "id": "test", "minLevel": 1 }],
+      "dependsOn": [
+        {
+          "id": "test",
+          "minLevel": 1
+        }
+      ],
       "lastCycleId": null
     },
     {
@@ -72,17 +98,43 @@
       "level": 0,
       "xp": 0,
       "status": "locked",
-      "dependsOn": [{ "id": "ship", "minLevel": 1 }],
+      "dependsOn": [
+        {
+          "id": "ship",
+          "minLevel": 1
+        }
+      ],
       "lastCycleId": null
     }
   ],
   "edges": [
-    { "from": "research", "to": "memory" },
-    { "from": "memory", "to": "plan" },
-    { "from": "plan", "to": "build" },
-    { "from": "build", "to": "test" },
-    { "from": "test", "to": "ship" },
-    { "from": "ship", "to": "output" },
-    { "from": "output", "to": "memory" }
+    {
+      "from": "research",
+      "to": "memory"
+    },
+    {
+      "from": "memory",
+      "to": "plan"
+    },
+    {
+      "from": "plan",
+      "to": "build"
+    },
+    {
+      "from": "build",
+      "to": "test"
+    },
+    {
+      "from": "test",
+      "to": "ship"
+    },
+    {
+      "from": "ship",
+      "to": "output"
+    },
+    {
+      "from": "output",
+      "to": "memory"
+    }
   ]
 }

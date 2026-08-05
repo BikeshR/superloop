@@ -13,7 +13,7 @@
     "state/**",
     "generated/**"
   ],
-  "lastCycleId": null,
-  "lastCycleAt": null,
-  "totalCycles": 0
+  "lastCycleId": "cycle-1",
+  "lastCycleAt": "2026-08-05T15:31:52.530Z",
+  "totalCycles": 1
 }
