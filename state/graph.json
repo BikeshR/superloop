@@ -1,0 +1,88 @@
+{
+  "$schemaVersion": 1,
+  "updatedAt": null,
+  "nodes": [
+    {
+      "id": "research",
+      "label": "Research",
+      "kind": "research",
+      "level": 0,
+      "xp": 0,
+      "status": "unlocked",
+      "dependsOn": [],
+      "lastCycleId": null
+    },
+    {
+      "id": "memory",
+      "label": "Memory",
+      "kind": "memory",
+      "level": 0,
+      "xp": 0,
+      "status": "locked",
+      "dependsOn": [{ "id": "research", "minLevel": 1 }],
+      "lastCycleId": null
+    },
+    {
+      "id": "plan",
+      "label": "Plan",
+      "kind": "plan",
+      "level": 0,
+      "xp": 0,
+      "status": "locked",
+      "dependsOn": [{ "id": "memory", "minLevel": 1 }],
+      "lastCycleId": null
+    },
+    {
+      "id": "build",
+      "label": "Build",
+      "kind": "build",
+      "level": 0,
+      "xp": 0,
+      "status": "locked",
+      "dependsOn": [
+        { "id": "memory", "minLevel": 2 },
+        { "id": "plan", "minLevel": 1 }
+      ],
+      "lastCycleId": null
+    },
+    {
+      "id": "test",
+      "label": "Test",
+      "kind": "test",
+      "level": 0,
+      "xp": 0,
+      "status": "locked",
+      "dependsOn": [{ "id": "build", "minLevel": 1 }],
+      "lastCycleId": null
+    },
+    {
+      "id": "ship",
+      "label": "Ship",
+      "kind": "ship",
+      "level": 0,
+      "xp": 0,
+      "status": "locked",
+      "dependsOn": [{ "id": "test", "minLevel": 1 }],
+      "lastCycleId": null
+    },
+    {
+      "id": "output",
+      "label": "Output",
+      "kind": "output",
+      "level": 0,
+      "xp": 0,
+      "status": "locked",
+      "dependsOn": [{ "id": "ship", "minLevel": 1 }],
+      "lastCycleId": null
+    }
+  ],
+  "edges": [
+    { "from": "research", "to": "memory" },
+    { "from": "memory", "to": "plan" },
+    { "from": "plan", "to": "build" },
+    { "from": "build", "to": "test" },
+    { "from": "test", "to": "ship" },
+    { "from": "ship", "to": "output" },
+    { "from": "output", "to": "memory" }
+  ]
+}

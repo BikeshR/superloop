@@ -1,0 +1,16 @@
+{
+  "$schemaVersion": 1,
+  "paused": false,
+  "pauseReason": null,
+  "consecutiveFailures": 0,
+  "failureThreshold": 3,
+  "cadenceHours": 4,
+  "xpPerSuccess": 10,
+  "xpPerLevel": 50,
+  "maxDiffFiles": 20,
+  "maxDiffLines": 800,
+  "allowedPaths": ["state/**", "generated/**"],
+  "lastCycleId": null,
+  "lastCycleAt": null,
+  "totalCycles": 0
+}

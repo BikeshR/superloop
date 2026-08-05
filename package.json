@@ -1,0 +1,18 @@
+{
+  "name": "superloop",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Autonomous, self-building AI loop with an Upload-Labs-style dashboard.",
+  "type": "module",
+  "workspaces": [
+    "core/web/server",
+    "core/web/client"
+  ],
+  "scripts": {
+    "dev:server": "npm run dev -w core/web/server",
+    "dev:client": "npm run dev -w core/web/client",
+    "build:client": "npm run build -w core/web/client",
+    "start": "npm run build:client && npm run start -w core/web/server",
+    "cycle:guardrails": "node core/scripts/check-guardrails.mjs"
+  }
+}
