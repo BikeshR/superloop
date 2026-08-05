@@ -99,7 +99,8 @@ git merge --no-ff cycle/<cycleId>-<node>
 git branch -d cycle/<cycleId>-<node>
 ```
 
-Record the success:
+Record the success (this also commits the `state/*` changes for you — you
+don't need a separate `git commit` for graph.json/control.json/log.jsonl):
 ```
 node core/scripts/update-graph.mjs success --node <node> --cycle <cycleId> --note "<one-line summary>"
 ```
@@ -114,7 +115,8 @@ git checkout main
 git branch -D cycle/<cycleId>-<node>
 ```
 
-Record the failure (this also feeds the circuit breaker):
+Record the failure (this also feeds the circuit breaker and commits the
+`state/*` changes for you):
 ```
 node core/scripts/update-graph.mjs fail --node <node> --cycle <cycleId> --reason "<what went wrong>"
 ```

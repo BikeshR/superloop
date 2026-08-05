@@ -1,7 +1,7 @@
 import express from "express";
 import path from "node:path";
 import fs from "node:fs";
-import { ROOT, readGraph, readControl, writeControl, readLog, appendLog } from "./state.js";
+import { ROOT, readGraph, readControl, writeControl, readLog, appendLog, commitStateChange } from "./state.js";
 
 const app = express();
 const PORT = Number(process.env.PORT ?? 4319);
@@ -40,6 +40,13 @@ app.post("/api/control", express.json(), (req, res) => {
     }
 
     writeControl(control);
+    commitStateChange(
+      typeof body.paused === "boolean"
+        ? body.paused
+          ? `loop paused: ${control.pauseReason}`
+          : "loop resumed"
+        : "control.json updated via dashboard"
+    );
     res.json({ ok: true, control });
   } catch (err) {
     res.status(500).json({ error: (err as Error).message });

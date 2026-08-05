@@ -22,6 +22,7 @@ import {
   assertControlShape,
   recomputeUnlocks,
   parseArgs,
+  commitStateChange,
   fail,
   ok,
 } from "./lib.mjs";
@@ -69,6 +70,7 @@ function cmdSuccess(args) {
     xpAfter: node.xp,
     note: args.note ?? null,
   });
+  commitStateChange(`cycle ${args.cycle}: ${node.id} succeeded (level ${node.level})`);
   ok({ node: node.id, level: node.level, xp: node.xp });
 }
 
@@ -99,6 +101,7 @@ function cmdFail(args) {
   if (breakerTripped) {
     appendLog({ cycleId: args.cycle, result: "paused", reason: control.pauseReason });
   }
+  commitStateChange(`cycle ${args.cycle}: ${node.id} failed${breakerTripped ? " (circuit breaker tripped)" : ""}`);
   ok({ node: node.id, consecutiveFailures: control.consecutiveFailures, paused: control.paused });
 }
 
@@ -108,6 +111,7 @@ function cmdPause(args) {
   control.pauseReason = args.reason ?? "paused by hand";
   saveState(graph, control);
   appendLog({ result: "paused", reason: control.pauseReason });
+  commitStateChange(`loop paused: ${control.pauseReason}`);
   ok({ paused: true, reason: control.pauseReason });
 }
 
@@ -118,6 +122,7 @@ function cmdResume() {
   control.consecutiveFailures = 0;
   saveState(graph, control);
   appendLog({ result: "resumed" });
+  commitStateChange("loop resumed");
   ok({ paused: false });
 }
 

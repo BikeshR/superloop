@@ -7,6 +7,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { execSync } from "node:child_process";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 // src/ (or dist/) -> server -> web -> core -> repo root
@@ -76,6 +77,16 @@ export function writeControl(control: Control): void {
 export function appendLog(entry: Omit<LogEntry, "ts">): void {
   const line = JSON.stringify({ ts: new Date().toISOString(), ...entry });
   fs.appendFileSync(STATE_PATHS.log, line + "\n");
+}
+
+/** Mirrors core/scripts/lib.mjs's commitStateChange -- the dashboard's
+ *  pause/resume button mutates control.json directly, so it needs to leave
+ *  a clean, committed working tree too, same as the CLI mutator does. */
+export function commitStateChange(message: string): void {
+  execSync(`git add state/graph.json state/control.json state/log.jsonl`, { cwd: ROOT });
+  const staged = execSync(`git diff --cached --name-only`, { cwd: ROOT, encoding: "utf8" }).trim();
+  if (!staged) return;
+  execSync(`git commit -q -m ${JSON.stringify(message)}`, { cwd: ROOT });
 }
 
 export function readLog(opts: { since?: string; limit?: number } = {}): LogEntry[] {

@@ -4,6 +4,7 @@
 import { fileURLToPath } from "node:url";
 import path from "node:path";
 import fs from "node:fs";
+import { execSync } from "node:child_process";
 
 export const ROOT = path.resolve(fileURLToPath(import.meta.url), "../../..");
 
@@ -98,6 +99,17 @@ export function parseArgs(argv) {
     }
   }
   return args;
+}
+
+/** update-graph.mjs is the sanctioned mutator for state/*, so it also owns
+ *  committing those changes -- a cycle should never end with an uncommitted
+ *  diff sitting in the working tree for the next cycle (or a human) to trip
+ *  over. Commits only state/*, never anything else. */
+export function commitStateChange(message) {
+  execSync(`git add state/graph.json state/control.json state/log.jsonl`, { cwd: ROOT });
+  const staged = execSync(`git diff --cached --name-only`, { cwd: ROOT, encoding: "utf8" }).trim();
+  if (!staged) return; // nothing changed (shouldn't normally happen, log.jsonl always grows)
+  execSync(`git commit -q -m ${JSON.stringify(message)}`, { cwd: ROOT });
 }
 
 export function fail(message) {
