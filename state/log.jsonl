@@ -5,3 +5,4 @@
 {"ts":"2026-08-05T16:10:49.508Z","cycleId":"cycle-5","node":"research","result":"success","levelAfter":1,"xpAfter":50,"note":"confirmed generated/ modules are standalone artifacts, not wired into core/"}
 {"ts":"2026-08-05T16:12:34.515Z","cycleId":"cycle-6","node":"memory","result":"success","levelAfter":0,"xpAfter":10,"note":"consolidated 4 build-prep notes into one brief; corrected stale UI-ownership claim"}
 {"ts":"2026-08-05T16:15:02.390Z","cycleId":"cycle-7","node":"memory","result":"success","levelAfter":0,"xpAfter":20,"note":"introduced actionable/reference tag convention across the corpus; fixed stale relatedNodes"}
+{"ts":"2026-08-05T16:19:17.985Z","cycleId":"cycle-8","node":"memory","result":"success","levelAfter":0,"xpAfter":30,"note":"corrected build-readiness-brief.md's placeholder createdAt to its real merge time"}
