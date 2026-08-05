@@ -4,8 +4,26 @@ You are running **one cycle** of the superloop. Follow these steps in order,
 then stop — do not loop internally. The next scheduled trigger runs the next
 cycle. All commands below assume your working directory is the repo root.
 
-## 0. Guardrail check (must be first)
+## 0. Sync, then guardrail check (must be first)
 
+This runs both as a scheduled cloud cycle (fresh clone every time) and as a
+manual local cycle a human triggers on their own machine. Always sync first
+so both starting points converge on the same state:
+
+```
+git fetch origin main --quiet
+git merge --ff-only origin/main --quiet
+```
+
+This is a no-op in a fresh cloud clone (already current) and is what keeps a
+local checkout from working off stale state after cloud cycles have run
+since you last pulled. If this fails (local `main` has diverged — e.g. an
+unpushed local commit sitting alongside cycles the cloud already ran),
+**stop**: don't force-merge or rebase past it. Report the divergence and let
+a human reconcile it by hand; don't guess at a resolution for `graph.json`/
+`control.json`.
+
+Then:
 ```
 node core/scripts/check-guardrails.mjs pre
 ```
@@ -141,10 +159,16 @@ fix or accept the situation, and resume via the dashboard or
 ## Hard limits, always
 
 - One node, one cycle. Never work on more than one node per invocation.
-- You run in an isolated cloud sandbox, cloned fresh from `origin/main` each
-  time — that clone is already current, there is nothing to `git pull`.
+- Whether you're a scheduled cloud cycle or a manually triggered local one,
+  step 0's sync is what keeps both starting points consistent — don't skip
+  it because "this is probably already current."
 - The only thing you ever push is `main`, and only after step 5 or step 6's
   `update-graph.mjs` call. Never push a feature branch, never force-push,
   never push anything the guardrail diff-check rejected.
+- If a push in step 5/6 is rejected (another cycle — cloud or local — pushed
+  in between): the commit already happened locally, so nothing is lost, but
+  do not force-push and do not attempt to merge/rebase `state/*` yourself —
+  those files aren't line-mergeable in a way that's safe to automate. Leave
+  it for the next invocation's step-0 sync (or a human) to reconcile.
 - Never modify `core/**` or `control.json`'s safety fields, even to "fix" something — flag it in the failure reason instead and stop.
 - If anything is ambiguous or you're not confident the change is safe, prefer the fail path over guessing.

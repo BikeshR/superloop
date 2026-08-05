@@ -13,6 +13,7 @@
     "dev:client": "npm run dev -w core/web/client",
     "build:client": "npm run build -w core/web/client",
     "start": "npm run build:client && npm run start -w core/web/server",
+    "cycle": "claude -p \"Follow core/CYCLE.md and run exactly one cycle.\"",
     "cycle:guardrails": "node core/scripts/check-guardrails.mjs"
   }
 }

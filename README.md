@@ -48,18 +48,33 @@ npm run build:client
 npm start              # builds nothing else; serves the built client from the server
 ```
 
-## Running a cycle by hand
+## Two ways to run a cycle — cloud routine and local, side by side
 
 A cycle is just a Claude Code agent given `core/CYCLE.md` as its task —
-there's no separate script that "is" the loop:
+there's no separate script that "is" the loop, which is what lets the same
+instructions drive both an unsupervised cloud routine *and* an on-demand
+local run from this machine:
 
-```
-# with claude code cli, from the repo root:
-claude "Follow core/CYCLE.md and run exactly one cycle."
-```
+- **Scheduled (unsupervised)** — the `superloop-cycle` routine, every 4
+  hours, in an isolated cloud sandbox cloned fresh from `origin/main`.
+- **Manual (local, on demand)** — any of:
+  - In an interactive Claude Code session in this repo: `/cycle`
+  - Headless from a terminal: `npm run cycle`
+  - Spelled out: `claude "Follow core/CYCLE.md and run exactly one cycle."`
 
-It will check `state/control.json` first and refuse to do anything if
-`paused: true`.
+Both paths run the identical `core/CYCLE.md` instructions and both check
+`state/control.json` first, refusing to do anything if `paused: true`.
+
+**Running both is safe, with one known edge case.** Every cycle now syncs
+(`git fetch` + fast-forward merge) before doing any work and pushes when
+it's done, so a local run and a cloud run will not silently work from
+different versions of the state. If a local cycle and a scheduled cloud
+cycle happen to land at almost the same moment, one cycle's final push can
+get rejected (the other already advanced `main`) — nothing is lost (the
+commit still exists locally), it just doesn't reach `origin` until the next
+sync reconciles it. Given the routine's own cadence (every 4h) this is rare
+in practice; it isn't solved with locking, just designed to fail safe rather
+than corrupt `graph.json`/`control.json` by auto-merging them.
 
 ## How cloud-scheduled cycles and the local dashboard stay in sync
 
