@@ -25,6 +25,5 @@ hand-authored and off-limits to the loop per `README.md` —
 `build`/`test` may only touch `generated/**` and `state/**`, so no cycle can
 ever edit `graph-render.ts`. This file is descriptive reference for a
 *human* who decides to extend the dashboard themselves, not a target for an
-automated cycle — hence the empty `relatedNodes` above, the corpus
-convention (see `build-readiness-brief.md`) for human-only background
-material.
+automated cycle — hence `relatedNodes: []` (convention documented in
+`build-readiness-brief.md`, not repeated here).
