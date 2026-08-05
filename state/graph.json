@@ -1,16 +1,16 @@
 {
   "$schemaVersion": 1,
-  "updatedAt": "2026-08-05T16:08:19.134Z",
+  "updatedAt": "2026-08-05T16:10:49.508Z",
   "nodes": [
     {
       "id": "research",
       "label": "Research",
       "kind": "research",
-      "level": 0,
-      "xp": 40,
+      "level": 1,
+      "xp": 50,
       "status": "unlocked",
       "dependsOn": [],
-      "lastCycleId": "cycle-4"
+      "lastCycleId": "cycle-5"
     },
     {
       "id": "memory",
@@ -18,7 +18,7 @@
       "kind": "memory",
       "level": 0,
       "xp": 0,
-      "status": "locked",
+      "status": "unlocked",
       "dependsOn": [
         {
           "id": "research",
