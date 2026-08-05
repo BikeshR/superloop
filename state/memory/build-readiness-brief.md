@@ -1,7 +1,7 @@
 ---
 tags: [actionable, build, planning, memory-index, log-summarizer, architecture]
 relatedNodes: [research, memory, plan, build]
-createdAt: 2026-08-05T00:00:00.000Z
+createdAt: 2026-08-05T16:12:34.515Z
 ---
 
 # Build readiness brief: what `plan`/`build` need for the first `generated/` module
@@ -20,6 +20,14 @@ starting to use so a skim can tell, from front-matter alone, which files a
 background context only (`reference`, see `upload-labs-ui-patterns.md`).
 Future `memory` cycles should keep applying one or the other as the corpus
 grows, rather than leaving new files untagged either way.
+
+`createdAt` corrected (cycle-8 curation): this file inherited the
+`00:00:00.000Z` placeholder from the first source file it was consolidated
+from (cycle-2's `first-build-module-candidates.md`), which never reflected
+a real moment — it now reads the actual merge time of this consolidated
+file (cycle-6, per `state/log.jsonl`). Matters because the eventual
+`memory-index` module (see below) will sort/index on this field; a
+placeholder timestamp would make this file always look artificially old.
 
 ## Recommendation: `memory-index` first, `log-summarizer` second
 
