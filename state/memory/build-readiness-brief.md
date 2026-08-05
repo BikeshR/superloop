@@ -1,5 +1,5 @@
 ---
-tags: [build, planning, memory-index, log-summarizer, architecture]
+tags: [actionable, build, planning, memory-index, log-summarizer, architecture]
 relatedNodes: [research, memory, plan, build]
 createdAt: 2026-08-05T00:00:00.000Z
 ---
@@ -13,6 +13,13 @@ appends. Distilled and replaces: `first-build-module-candidates.md`,
 `memory-frontmatter-parsing.md`, `log-jsonl-event-shapes.md`,
 `generated-modules-are-standalone.md` (all removed by this curation pass;
 their content lives here now, condensed).
+
+Tagged `actionable` (cycle-7 curation) — a small vocabulary this corpus is
+starting to use so a skim can tell, from front-matter alone, which files a
+`plan`/`build` cycle should read closely (`actionable`) versus which are
+background context only (`reference`, see `upload-labs-ui-patterns.md`).
+Future `memory` cycles should keep applying one or the other as the corpus
+grows, rather than leaving new files untagged either way.
 
 ## Recommendation: `memory-index` first, `log-summarizer` second
 
