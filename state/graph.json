@@ -1,16 +1,16 @@
 {
   "$schemaVersion": 1,
-  "updatedAt": "2026-08-05T16:06:07.789Z",
+  "updatedAt": "2026-08-05T16:08:19.134Z",
   "nodes": [
     {
       "id": "research",
       "label": "Research",
       "kind": "research",
       "level": 0,
-      "xp": 30,
+      "xp": 40,
       "status": "unlocked",
       "dependsOn": [],
-      "lastCycleId": "cycle-3"
+      "lastCycleId": "cycle-4"
     },
     {
       "id": "memory",
